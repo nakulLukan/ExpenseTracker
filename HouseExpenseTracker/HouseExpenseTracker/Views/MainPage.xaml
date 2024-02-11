@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HouseExpenseTracker.Views.MainPage"
+             xmlns:app="clr-namespace:HouseExpenseTracker"
+             xmlns:vm="clr-namespace:HouseExpenseTracker.ViewModels"
+             xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
+             xmlns:dto="clr-namespace:HouseExpenseTracker.Models"
+             xmlns:converter="clr-namespace:HouseExpenseTracker.Converters"
+             Title="Expense Tracker"
+             x:DataType="vm:MainPageViewModel">
+    <ContentPage.Resources>
+        <converter:CurrencyConverter x:Key="CurrencyConverter"/>
+    </ContentPage.Resources>
+    <AbsoluteLayout>
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0, 1,1"
+                    AbsoluteLayout.LayoutFlags="SizeProportional"
+                    Margin="5,2">
+            <StackLayout>
+                <StackLayout Padding="10,30,0,0"  VerticalOptions="Center" Spacing="25">
+                    <Label FontSize="Title" CharacterSpacing="3" FontAttributes="Bold">House Construction Cost</Label>
+                    <Label FontSize="Subtitle">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total Cost: " />
+                                <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Frame IsVisible="false"
+    HeightRequest="16" BackgroundColor="Transparent" CornerRadius="0">
+
+                    </Frame>
+                </StackLayout>
+                <CollectionView ItemsSource="{Binding MonthlyExpenses}" 
+                                IsGrouped="True"
+                                Margin="10,60,10,10"
+                                VerticalScrollBarVisibility="Never"
+                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                ItemSizingStrategy="MeasureAllItems">
+                                    <CollectionView.GroupHeaderTemplate>
+                                        <DataTemplate x:DataType="dto:ExpenseGroupListItemDto">
+                                            <FlexLayout AlignContent="SpaceBetween"
+                                                        Direction="Row"
+                                                        FlowDirection="MatchParent" JustifyContent="SpaceBetween">
+                                                <Label Text="{Binding GroupName}" 
+                                                       FlexLayout.Basis="50%"
+                                                       Style="{StaticResource Caption}" HorizontalOptions="StartAndExpand"/>
+                                                <Label FlexLayout.Basis="50%"
+                                                                       Style="{StaticResource Caption}" HorizontalOptions="EndAndExpand">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Total: "/>
+                                                            <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" 
+                                                                  FontAttributes="Bold"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </FlexLayout>
+                                        </DataTemplate>
+                                    </CollectionView.GroupHeaderTemplate>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="{x:Type dto:ExpenseListItemDto}">
+                                            <Grid Padding="0,10" ColumnSpacing="5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="30" />
+                                                    <ColumnDefinition Width="50" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <VerticalStackLayout VerticalOptions="Center">
+                                                    <Label Text="{Binding AddedDate}" HorizontalOptions="Center"/>
+                                                    <Label Text="{Binding AddedMonth}"  HorizontalOptions="Center"/>
+                                                </VerticalStackLayout>
+                                                <Frame Grid.Column="1" CornerRadius="0" Padding="5" BackgroundColor="Gray" BorderColor="Transparent" VerticalOptions="Center">
+                                                    <Image Source="brick.png" />
+                                                </Frame>
+
+                                                <VerticalStackLayout Grid.Column="2" Padding="10,0">
+                                                    <Label HorizontalOptions="FillAndExpand" Text="{Binding ExpenseName}" LineBreakMode="TailTruncation"></Label>
+                                                    <Label Style="{StaticResource Caption}" Text="{Binding Description}" LineBreakMode="WordWrap" MaxLines="2"></Label>
+                                                    <Label Style="{StaticResource Caption}">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Paid to "/>
+                                                                <Span Text="{Binding PaidTo}" FontAttributes="Bold"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </VerticalStackLayout>
+                                                <Label Grid.Column="3" HorizontalOptions="End" Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+        </ScrollView>
+
+        <Button Text="Add Expense"
+                Command="{Binding AddExpenseCommand}"
+                Margin="20"
+                AbsoluteLayout.LayoutBounds="1,1"
+                AbsoluteLayout.LayoutFlags="PositionProportional">
+        </Button>
+    </AbsoluteLayout>
+</ContentPage>

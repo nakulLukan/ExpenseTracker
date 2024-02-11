@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HouseExpenseTracker.ViewControls.AppPicker"
+             xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
+             x:DataType="vc:AppPicker"
+             x:Name="parent">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Picker">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter TargetName="frame" Property="BackgroundColor" Value="{Binding FocusColor}"></Setter>
+                                    <Setter TargetName="label" Property="TextColor" Value="{Binding FocusColor}"></Setter>
+                                    <Setter Property="TextColor" Value="{Binding FocusColor}"></Setter>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Frame x:Name="frame"
+       Padding="0,0,0,1" 
+       CornerRadius="0" 
+       IsClippedToBounds="true" 
+       BindingContext="{x:Reference parent}"
+       BackgroundColor="{Binding BorderColor}">
+        <VerticalStackLayout Margin="-10,-1,-1,0" 
+                         BackgroundColor="{Binding BackgroundColor}">
+            <Label x:Name="label"
+               Text = "{Binding Title}"
+               Padding="10,0,0,0"
+               Margin="0"
+               CharacterSpacing="2"
+               FontAttributes="Bold"
+               BackgroundColor="{Binding BackgroundColor}"
+               FontSize="12"></Label>
+            <Picker TextColor="{Binding TextColor}"
+                    ItemsSource="{Binding ItemsSource}"
+                    SelectedItem="{Binding SelectedItem}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedIndexChanged="Picker_SelectedIndexChanged"
+                    BackgroundColor="{Binding BackgroundColor}">
+            </Picker>
+            <BoxView HeightRequest="2" 
+                 Margin="0,-2,0,0" 
+                 Color="{Binding BackgroundColor}"></BoxView>
+        </VerticalStackLayout>
+    </Frame>
+</ContentView>

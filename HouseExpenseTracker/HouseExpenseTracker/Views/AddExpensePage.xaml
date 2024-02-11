@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HouseExpenseTracker.Views.AddExpensePage"
+             xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
+             xmlns:vm="clr-namespace:HouseExpenseTracker.ViewModels"
+             x:DataType="vm:AddExpensePageViewModel"
+             Title="New Expense">
+    <AbsoluteLayout>
+        <VerticalStackLayout AbsoluteLayout.LayoutBounds="0.5,0.3"
+                             AbsoluteLayout.LayoutFlags="PositionProportional"
+                             MinimumWidthRequest="300"
+                             x:Name="layout"
+                             Spacing="20">
+            <vc:AppEntry Placeholder="Give a title"
+                         Title="Expense Title"
+                         Text="{Binding NewExpense.Title}"
+                         TextTransform="Uppercase"></vc:AppEntry>
+            <vc:AppEditor Placeholder="Enter a description"
+                          Title="Description"
+                          Text="{Binding NewExpense.Description}"></vc:AppEditor>
+            <vc:AppPicker Title="Paid To"
+                          SelectedItem="{Binding NewExpense.PaidTo}"
+                          SelectedItemCommand="{Binding PaidToItemSelectedCommand}"
+                          ItemsSource="{Binding Persons}">
+            </vc:AppPicker>
+            <vc:AppDatePicker Date="{Binding NewExpense.ExpenseAddedOn}"
+                              Title="Date of Expense"
+                              WidthRequest="{Binding Source={x:Reference layout}, Path=MinimumWidthRequest}"></vc:AppDatePicker>
+            <vc:AppEntry Placeholder="0.00" 
+                         Title="Amount" 
+                         Text = "{Binding NewExpense.Amount}"
+                         Keyboard="Numeric"></vc:AppEntry>
+
+            <Button Text="Add Expense" Command="{Binding AddExpenseCommand}"/>
+        </VerticalStackLayout>
+    </AbsoluteLayout>
+</ContentPage>
