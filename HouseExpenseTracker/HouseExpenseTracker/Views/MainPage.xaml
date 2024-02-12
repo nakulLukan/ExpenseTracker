@@ -11,6 +11,10 @@
              x:DataType="vm:MainPageViewModel">
     <ContentPage.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter"/>
+        <Style x:Key="Currency" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource Primary}"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
     </ContentPage.Resources>
     <AbsoluteLayout>
         <ScrollView AbsoluteLayout.LayoutBounds="0,0, 1,1"
@@ -23,7 +27,8 @@
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Total Cost: " />
-                                <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" FontAttributes="Bold"/>
+                                <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}"
+                                      Style="{StaticResource Currency}"/>
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
@@ -52,7 +57,7 @@
                                                         <FormattedString>
                                                             <Span Text="Total: "/>
                                                             <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" 
-                                                                  FontAttributes="Bold"/>
+                                                                  Style="{StaticResource Currency}"/>
                                                         </FormattedString>
                                                     </Label.FormattedText>
                                                 </Label>
@@ -88,7 +93,11 @@
                                                         </Label.FormattedText>
                                                     </Label>
                                                 </VerticalStackLayout>
-                                                <Label Grid.Column="3" HorizontalOptions="End" Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"/>
+                                                <Label 
+                                                    Grid.Column="3"
+                                                    HorizontalOptions="End" 
+                                                    Style="{StaticResource Currency}"
+                                                    Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"/>
                                             </Grid>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>

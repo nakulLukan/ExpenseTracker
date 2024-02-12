@@ -36,11 +36,13 @@
                BackgroundColor="{Binding BackgroundColor}"
                FontSize="12"></Label>
         <vc:CustomPicker 
-                TextColor="{Binding TextColor}"
-                ItemsSource="{Binding ItemsSource}"
-                SelectedItem="{Binding SelectedItem}"
-                ItemDisplayBinding="{Binding Name}"
-                BackgroundColor="{Binding BackgroundColor}">
+            TextColor="{Binding TextColor}"
+            ItemsSource="{Binding ItemsSource}"
+            SelectedItem="{Binding SelectedItem}"
+            ItemDisplayBinding="{Binding Name}"
+            HorizontalTextAlignment="Start"
+            HorizontalOptions="Start"
+            BackgroundColor="{Binding BackgroundColor}">
             <vc:CustomPicker.Behaviors>
                 <toolkit:EventToCommandBehavior
                         EventName="SelectedIndexChanged"

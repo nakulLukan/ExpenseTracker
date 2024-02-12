@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HouseExpenseTracker.Domain;
 using HouseExpenseTracker.Infrastructure.Data;
 using HouseExpenseTracker.Models;
+using HouseExpenseTracker.ViewControls;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
@@ -12,6 +13,7 @@ namespace HouseExpenseTracker.ViewModels;
 public partial class AddExpensePageViewModel : ObservableObject
 {
     readonly AppDbContext _dbContext;
+    readonly SnackbarService _alertService;
 
     [ObservableProperty]
     NewExpenseDto _newExpense;
@@ -19,12 +21,13 @@ public partial class AddExpensePageViewModel : ObservableObject
     [ObservableProperty]
     ObservableCollection<PersonPickerItemDto> _persons;
 
-    public AddExpensePageViewModel(IDbContextFactory<AppDbContext> dbContext)
+    public AddExpensePageViewModel(IDbContextFactory<AppDbContext> dbContext, SnackbarService alertService)
     {
         _dbContext = dbContext.CreateDbContext();
         _newExpense = new();
         _persons = new();
         InitCommand = new AsyncRelayCommand(Init);
+        _alertService = alertService;
     }
 
     public IAsyncRelayCommand InitCommand { get; }
@@ -51,18 +54,25 @@ public partial class AddExpensePageViewModel : ObservableObject
     [RelayCommand]
     async Task AddExpense()
     {
-        Expense newExpense = new Expense()
+        try
         {
-            Title = NewExpense.Title,
-            Amount = float.Parse(NewExpense.Amount),
-            Description = NewExpense.Description,
-            ExpenseAddedOn = NewExpense.ExpenseAddedOn,
-            PaidToId = NewExpense.PaidTo?.Id
-        };
+            Expense newExpense = new Expense()
+            {
+                Title = NewExpense.Title.ToUpper(),
+                Amount = NewExpense.Amount.Value,
+                Description = NewExpense.Description?.Humanize(),
+                ExpenseAddedOn = NewExpense.ExpenseAddedOn,
+                PaidToId = NewExpense.PaidTo?.Id
+            };
 
-        _dbContext.Expenses.Add(newExpense);
-        await _dbContext.SaveChangesAsync();
-        await Shell.Current.GoToAsync("..");
+            _dbContext.Expenses.Add(newExpense);
+            await _dbContext.SaveChangesAsync();
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            await _alertService.Error();
+        }
     }
 
     [RelayCommand]

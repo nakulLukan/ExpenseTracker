@@ -1,4 +1,5 @@
 ﻿using HouseExpenseTracker.Infrastructure.Data;
+using HouseExpenseTracker.ViewControls;
 using HouseExpenseTracker.ViewModels;
 using HouseExpenseTracker.Views;
 
@@ -11,9 +12,10 @@ public static class ServiceRegistry
         RegisterViewsAndViewModels(services);
         string dbBasePath = FileSystem.AppDataDirectory;
         AppDbContext.Init(FileSystem.AppDataDirectory);
-
         services.AddDbContextFactory<AppDbContext>();
-        services.AddDbContext<AppDbContext>(opt=> { }, contextLifetime: ServiceLifetime.Singleton);
+        services.AddDbContext<AppDbContext>(opt => { }, contextLifetime: ServiceLifetime.Scoped);
+
+        services.AddSingleton<SnackbarService>();
         return services;
     }
 

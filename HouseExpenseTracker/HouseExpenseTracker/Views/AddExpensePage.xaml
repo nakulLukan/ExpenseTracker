@@ -10,7 +10,7 @@
         <VerticalStackLayout AbsoluteLayout.LayoutBounds="0.5,0.3"
                              AbsoluteLayout.LayoutFlags="PositionProportional"
                              MinimumWidthRequest="300" 
-                             MaximumWidthRequest="400"
+                             MaximumWidthRequest="{OnPlatform 500, Android=300}"
                              x:Name="layout"
                              Spacing="20">
             <vc:AppEntry Placeholder="Give a title"

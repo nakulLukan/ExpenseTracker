@@ -42,7 +42,8 @@
             Format="{Binding Format}"
             TextColor="{Binding TextColor}"
             WidthRequest="{Binding WidthRequest}"
-            BackgroundColor="{Binding BackgroundColor}">
+            BackgroundColor="{Binding BackgroundColor}"
+            HorizontalOptions="Start">
         </vc:CustomDatePicker>
         <BoxView 
             x:Name="bottomBorder"
