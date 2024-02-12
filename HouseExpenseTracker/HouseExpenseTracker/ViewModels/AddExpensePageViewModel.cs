@@ -19,12 +19,12 @@ public partial class AddExpensePageViewModel : ObservableObject
     [ObservableProperty]
     ObservableCollection<PersonPickerItemDto> _persons;
 
-    public AddExpensePageViewModel(AppDbContext dbContext)
+    public AddExpensePageViewModel(IDbContextFactory<AppDbContext> dbContext)
     {
-        _dbContext = dbContext;
+        _dbContext = dbContext.CreateDbContext();
         _newExpense = new();
         _persons = new();
-        InitCommand = new AsyncRelayCommand(async () => { });
+        InitCommand = new AsyncRelayCommand(Init);
     }
 
     public IAsyncRelayCommand InitCommand { get; }

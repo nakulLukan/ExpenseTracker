@@ -112,4 +112,19 @@
 	  <ProjectReference Include="..\HouseExpenseTracker.Infrastructure\HouseExpenseTracker.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Platforms\Windows\ViewHandlers\DatePickerHandler.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\ViewHandlers\EditorHandler.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\ViewHandlers\EntryHandler.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\ViewHandlers\PickerHandler.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

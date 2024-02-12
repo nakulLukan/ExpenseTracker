@@ -7,15 +7,15 @@
              x:Name="parent">
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style TargetType="Entry">
+            <Style TargetType="vc:CustomEntry">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal" />
                             <VisualState x:Name="Focused">
                                 <VisualState.Setters>
-                                    <Setter TargetName="frame" Property="BackgroundColor" Value="{Binding FocusColor}"></Setter>
-                                    <Setter TargetName="label" Property="TextColor" Value="{Binding FocusColor}"></Setter>
+                                    <Setter TargetName="bottomBorder" Property="BoxView.BackgroundColor" Value="{Binding FocusColor}"></Setter>
+                                    <Setter TargetName="label" Property="Label.TextColor" Value="{Binding FocusColor}"></Setter>
                                     <Setter Property="TextColor" Value="{Binding FocusColor}"></Setter>
                                 </VisualState.Setters>
                             </VisualState>
@@ -25,33 +25,26 @@
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
-    <Frame x:Name="frame"
-           Padding="0,0,0,1" 
-           CornerRadius="0" 
-           IsClippedToBounds="true" 
-           
-           BindingContext="{x:Reference parent}"
-           BackgroundColor="{Binding BorderColor}">
-        <VerticalStackLayout Margin="-10,-1,-1,0" 
-                             BackgroundColor="{Binding BackgroundColor}">
-            <Label x:Name="label"
+    <VerticalStackLayout BackgroundColor="{Binding BackgroundColor}"
+                             BindingContext="{x:Reference parent}">
+        <Label x:Name="label"
                    Text = "{Binding Title}"
-                   Padding="10,0,0,0"
                    Margin="0"
                    CharacterSpacing="2"
                    FontAttributes="Bold"
                    BackgroundColor="{Binding BackgroundColor}"
                    FontSize="12"></Label>
-            <Entry Placeholder="{Binding Placeholder}" 
-                   TextTransform="{Binding TextTransform}"
-                   TextColor="{Binding TextColor}"
-                   Keyboard="{Binding Keyboard}"
-                   Text="{Binding Text}"
-                   BackgroundColor="{Binding BackgroundColor}">
-            </Entry>
-            <BoxView HeightRequest="2" 
-                     Margin="0,-2,0,0" 
-                     Color="{Binding BackgroundColor}"></BoxView>
-        </VerticalStackLayout>
-    </Frame>
+        <vc:CustomEntry Placeholder="{Binding Placeholder}" 
+                        TextTransform="{Binding TextTransform}"
+                        TextColor="{Binding TextColor}"
+                        Keyboard="{Binding Keyboard}"
+                        Text="{Binding Text}"
+                        CursorColor="{Binding FocusColor}"
+                        BackgroundColor="{Binding BackgroundColor}">
+        </vc:CustomEntry>
+        <BoxView 
+            HeightRequest="1" 
+            x:Name="bottomBorder"
+            BackgroundColor="{Binding BorderColor}"></BoxView>
+    </VerticalStackLayout>
 </ContentView>

@@ -110,10 +110,23 @@ public partial class AppPicker : ContentView
         set { SetValue(SelectedItemCommandProperty, value); }
     }
 
-    private void Picker_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        SelectedItemCommand?.Execute(SelectedItem);
-    }
+    #endregion
+}
 
+public class CustomPicker : Picker 
+{
+    #region CursorColor
+
+    public static readonly BindableProperty CursorColorProperty =
+        BindableProperty.Create(nameof(CursorColor), typeof(Color), typeof(CustomPicker));
+
+    public Color CursorColor
+    {
+        get => (Color)GetValue(CursorColorProperty);
+        set
+        {
+            SetValue(CursorColorProperty, value);
+        }
+    }
     #endregion
 }

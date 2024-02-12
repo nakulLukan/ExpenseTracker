@@ -6,12 +6,14 @@
              x:DataType="vm:AddExpensePageViewModel"
              xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
              Title="TestPage">
-    <VerticalStackLayout>
+    <VerticalStackLayout Padding="10">
         <Label 
             Text="Hello"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <vc:AppEditor Text="Random trext"></vc:AppEditor>
-        <vc:AppEntry Text="Random trext"></vc:AppEntry>
+        <vc:AppEntry></vc:AppEntry>
+        <vc:AppEditor></vc:AppEditor>
+        <vc:AppDatePicker></vc:AppDatePicker>
+        <vc:AppPicker></vc:AppPicker>
     </VerticalStackLayout>
 </ContentPage>

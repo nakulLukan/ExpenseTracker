@@ -9,13 +9,14 @@
     <AbsoluteLayout>
         <VerticalStackLayout AbsoluteLayout.LayoutBounds="0.5,0.3"
                              AbsoluteLayout.LayoutFlags="PositionProportional"
-                             MinimumWidthRequest="300"
+                             MinimumWidthRequest="300" 
+                             MaximumWidthRequest="400"
                              x:Name="layout"
                              Spacing="20">
             <vc:AppEntry Placeholder="Give a title"
                          Title="Expense Title"
-                         Text="{Binding NewExpense.Title}"
-                         TextTransform="Uppercase"></vc:AppEntry>
+                         Keyboard="Text"
+                         Text="{Binding NewExpense.Title}"></vc:AppEntry>
             <vc:AppEditor Placeholder="Enter a description"
                           Title="Description"
                           Text="{Binding NewExpense.Description}"></vc:AppEditor>
@@ -28,7 +29,7 @@
                               Title="Date of Expense"
                               WidthRequest="{Binding Source={x:Reference layout}, Path=MinimumWidthRequest}"></vc:AppDatePicker>
             <vc:AppEntry Placeholder="0.00" 
-                         Title="Amount" 
+                         Title="Amount (₹)" 
                          Text = "{Binding NewExpense.Amount}"
                          Keyboard="Numeric"></vc:AppEntry>
 

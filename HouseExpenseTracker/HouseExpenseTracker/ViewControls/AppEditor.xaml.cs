@@ -128,3 +128,21 @@ public partial class AppEditor : ContentView
     }
     #endregion
 }
+
+public class CustomEditor : Editor
+{
+    #region CursorColor
+
+    public static readonly BindableProperty CursorColorProperty =
+        BindableProperty.Create(nameof(CursorColor), typeof(Color), typeof(CustomEditor));
+
+    public Color CursorColor
+    {
+        get => (Color)GetValue(CursorColorProperty);
+        set
+        {
+            SetValue(CursorColorProperty, value);
+        }
+    }
+    #endregion
+}

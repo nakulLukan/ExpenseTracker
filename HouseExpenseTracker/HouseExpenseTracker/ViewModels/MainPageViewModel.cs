@@ -71,6 +71,6 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     async Task AddExpense()
     {
-        await Shell.Current.GoToAsync("TestPage");
+        await Shell.Current.GoToAsync(PageRoutePath.AddExpensePage);
     }
 }

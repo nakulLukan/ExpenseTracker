@@ -108,8 +108,7 @@ public partial class AppEntry : ContentView
     #endregion
 
     #region Keyboard
-    public static readonly BindableProperty KeyboardProperty = BindableProperty.Create(nameof(Keyboard), typeof(Keyboard), typeof(InputView), Keyboard.Default,
-            coerceValue: (o, v) => (Keyboard)v ?? Keyboard.Default);
+    public static readonly BindableProperty KeyboardProperty = BindableProperty.Create(nameof(Keyboard), typeof(Keyboard), typeof(AppEntry), Keyboard.Default);
 
     [System.ComponentModel.TypeConverter(typeof(Microsoft.Maui.Converters.KeyboardTypeConverter))]
     public Keyboard Keyboard
@@ -126,6 +125,24 @@ public partial class AppEntry : ContentView
     {
         get => (string)GetValue(TextProperty);
         set => SetValue(TextProperty, value);
+    }
+    #endregion
+}
+
+public class CustomEntry : Entry
+{
+    #region CursorColor
+
+    public static readonly BindableProperty CursorColorProperty =
+        BindableProperty.Create(nameof(CursorColor), typeof(Color), typeof(CustomEntry));
+
+    public Color CursorColor
+    {
+        get => (Color)GetValue(CursorColorProperty);
+        set
+        {
+            SetValue(CursorColorProperty, value);
+        }
     }
     #endregion
 }

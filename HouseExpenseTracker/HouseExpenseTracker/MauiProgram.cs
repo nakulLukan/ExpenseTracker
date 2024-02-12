@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using HouseExpenseTracker.Infrastructure.Data;
+using HouseExpenseTracker.ViewHandlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
 namespace HouseExpenseTracker
 {
     public static class MauiProgram
@@ -24,12 +24,16 @@ namespace HouseExpenseTracker
 #endif
             var app = builder.Build();
 
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-
-                var db = app.Services.GetService<AppDbContext>();
-                db.Database.Migrate();
+                using var db = app.Services.GetRequiredService<AppDbContext>();
+                await db.Database.MigrateAsync();
             });
+
+            EntryHandler.UseHandler();
+            EditorHandler.UseHandler();
+            PickerHandler.UseHandler();
+            DatePickerHandler.UseHandler();
             return app;
         }
     }

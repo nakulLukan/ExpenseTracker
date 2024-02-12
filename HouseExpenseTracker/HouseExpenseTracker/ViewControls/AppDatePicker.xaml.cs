@@ -118,3 +118,7 @@ public partial class AppDatePicker : ContentView
         }
     }
 }
+
+public class CustomDatePicker : DatePicker
+{
+}

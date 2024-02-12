@@ -7,15 +7,15 @@
              x:Name="parent">
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style TargetType="DatePicker">
+            <Style TargetType="vc:CustomDatePicker">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal" />
                             <VisualState x:Name="Focused">
                                 <VisualState.Setters>
-                                    <Setter TargetName="frame" Property="BackgroundColor" Value="{Binding FocusColor}"></Setter>
-                                    <Setter TargetName="label" Property="TextColor" Value="{Binding FocusColor}"></Setter>
+                                    <Setter TargetName="bottomBorder" Property="BoxView.BackgroundColor" Value="{Binding FocusColor}"></Setter>
+                                    <Setter TargetName="label" Property="Label.TextColor" Value="{Binding FocusColor}"></Setter>
                                     <Setter Property="TextColor" Value="{Binding FocusColor}"></Setter>
                                 </VisualState.Setters>
                             </VisualState>
@@ -25,32 +25,28 @@
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
-    <Frame x:Name="frame"
-           Padding="0,0,0,1" 
-           CornerRadius="0" 
-           IsClippedToBounds="False" 
-           BindingContext="{x:Reference parent}"
-           BackgroundColor="{Binding BorderColor}">
-        <VerticalStackLayout Margin="-10,-1,-1,0" 
-                         BackgroundColor="{Binding BackgroundColor}">
-            <Label x:Name="label"
+
+    <VerticalStackLayout 
+        BindingContext="{x:Reference parent}"
+        BackgroundColor="{Binding BackgroundColor}">
+        <Label x:Name="label"
                Text = "{Binding Title}"
-               Padding="10,0,0,0"
                Margin="0"
                CharacterSpacing="2"
                FontAttributes="Bold"
                BackgroundColor="{Binding BackgroundColor}"
                FontSize="12"></Label>
-            <DatePicker Date="{Binding Date}"
-                        PropertyChanged="DatePicker_PropertyChanged"
-               Format="{Binding Format}"
-               TextColor="{Binding TextColor}"
-               WidthRequest="{Binding WidthRequest}"
-               BackgroundColor="{Binding BackgroundColor}">
-            </DatePicker>
-            <BoxView HeightRequest="2" 
-                 Margin="0,-2,0,0" 
-                 Color="{Binding BackgroundColor}"></BoxView>
-        </VerticalStackLayout>
-    </Frame>
+        <vc:CustomDatePicker 
+            PropertyChanged="DatePicker_PropertyChanged"
+            Date="{Binding Date}"
+            Format="{Binding Format}"
+            TextColor="{Binding TextColor}"
+            WidthRequest="{Binding WidthRequest}"
+            BackgroundColor="{Binding BackgroundColor}">
+        </vc:CustomDatePicker>
+        <BoxView 
+            x:Name="bottomBorder"
+            HeightRequest="1" 
+            BackgroundColor="{Binding BorderColor}"></BoxView>
+    </VerticalStackLayout>
 </ContentView>
