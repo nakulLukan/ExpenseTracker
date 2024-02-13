@@ -3,7 +3,8 @@
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xx="clr-namespace:Microsoft.Maui.Controls">
 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
@@ -145,6 +146,22 @@
         </Setter>
     </Style>
     
+    <Style x:Key="AppInputTitle" TargetType="Label" >
+        <Setter Property="FontSize" Value="{OnPlatform Default=Caption, WinUI=Caption}"/>
+    </Style>
+    <Style TargetType="vc:CustomEntry">
+        <Setter Property="FontSize" Value="{OnPlatform Default=Small, WinUI=Body}"/>
+    </Style>
+    <Style TargetType="vc:CustomEditor">
+        <Setter Property="FontSize" Value="{OnPlatform Default=Small, WinUI=Body}"/>
+    </Style>
+    <Style TargetType="vc:CustomDatePicker">
+        <Setter Property="FontSize" Value="{OnPlatform Default=Small, WinUI=Body}"/>
+    </Style>
+    <Style TargetType="vc:CustomPicker">
+        <Setter Property="FontSize" Value="{OnPlatform Default=Small, WinUI=Body}"/>
+    </Style>
+    
     <Style TargetType="vc:AppEntry">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
         <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
@@ -218,20 +235,6 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-
-    <Style x:Key="Caption" TargetType="Label">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
-        <Setter Property="FontSize" Value="Small" />
-    </Style>
-    <Style x:Key="H1" TargetType="Label">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
-        <Setter Property="FontSize" Value="Header" />
-    </Style>
-
     <Style TargetType="Span">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
     </Style>

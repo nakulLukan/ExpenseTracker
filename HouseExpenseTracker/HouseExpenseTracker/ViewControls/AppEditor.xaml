@@ -33,14 +33,15 @@
                    CharacterSpacing="2"
                    FontAttributes="Bold"
                    BackgroundColor="{Binding BackgroundColor}"
-                   FontSize="12"></Label>
-        <vc:CustomEditor Placeholder="{Binding Placeholder}" 
-                    AutoSize="TextChanges"
-                    TextTransform="{Binding TextTransform}"
-                    TextColor="{Binding TextColor}"
-                    Keyboard="{Binding Keyboard}"
-                    Text="{Binding Text}"
-                    BackgroundColor="{Binding BackgroundColor}">
+                   Style="{StaticResource AppInputTitle}"></Label>
+        <vc:CustomEditor 
+            Placeholder="{Binding Placeholder}" 
+            AutoSize="TextChanges"
+            TextTransform="{Binding TextTransform}"
+            TextColor="{Binding TextColor}"
+            Keyboard="{Binding Keyboard}"
+            Text="{Binding Text}"
+            BackgroundColor="{Binding BackgroundColor}">
         </vc:CustomEditor>
         <BoxView x:Name="bottomBorder"
                  HeightRequest="1" 

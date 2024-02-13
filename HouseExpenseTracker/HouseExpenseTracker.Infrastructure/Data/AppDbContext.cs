@@ -44,6 +44,7 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Property(x => x.Title).IsRequired();
+        modelBuilder.Property(x => x.Description).IsRequired(false);
 
         modelBuilder.HasOne(x => x.PaidTo)
             .WithMany()

@@ -35,7 +35,7 @@
                CharacterSpacing="2"
                FontAttributes="Bold"
                BackgroundColor="{Binding BackgroundColor}"
-               FontSize="12"></Label>
+               Style="{StaticResource AppInputTitle}"></Label>
         <vc:CustomDatePicker 
             PropertyChanged="DatePicker_PropertyChanged"
             Date="{Binding Date}"

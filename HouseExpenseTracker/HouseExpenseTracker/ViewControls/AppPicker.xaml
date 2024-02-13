@@ -34,14 +34,14 @@
                CharacterSpacing="2"
                FontAttributes="Bold"
                BackgroundColor="{Binding BackgroundColor}"
-               FontSize="12"></Label>
+               Style="{StaticResource AppInputTitle}"></Label>
         <vc:CustomPicker 
             TextColor="{Binding TextColor}"
             ItemsSource="{Binding ItemsSource}"
             SelectedItem="{Binding SelectedItem}"
             ItemDisplayBinding="{Binding Name}"
             HorizontalTextAlignment="Start"
-            HorizontalOptions="Start"
+            HorizontalOptions="FillAndExpand"
             BackgroundColor="{Binding BackgroundColor}">
             <vc:CustomPicker.Behaviors>
                 <toolkit:EventToCommandBehavior

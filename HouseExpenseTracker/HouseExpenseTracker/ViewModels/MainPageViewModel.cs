@@ -55,7 +55,7 @@ public partial class MainPageViewModel : ObservableObject
                             item.AddedMonth = month;
                             item.ExpenseName = x.Title;
                             item.Description = x.Description;
-                            item.PaidTo = x.PaidTo?.Name;
+                            item.PaidTo = x.PaidTo?.Name ?? "-";
                             item.Amount = x.Amount;
                             return item;
                         }).ToList()

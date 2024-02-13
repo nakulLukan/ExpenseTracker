@@ -106,5 +106,10 @@ public partial class AddExpensePageViewModel : ObservableObject
             Persons.Add(selectedPerson);
             NewExpense.PaidTo = selectedPerson;
         }
+        else
+        {
+            // Reset the paid to field
+            NewExpense.PaidTo = null;
+        }
     }
 }
