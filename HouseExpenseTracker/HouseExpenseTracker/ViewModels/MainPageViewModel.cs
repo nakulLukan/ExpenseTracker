@@ -57,6 +57,7 @@ public partial class MainPageViewModel : ObservableObject
                             item.Description = x.Description;
                             item.PaidTo = x.PaidTo?.Name ?? "-";
                             item.Amount = x.Amount;
+                            item.Id = x.Id;
                             return item;
                         }).ToList()
                 )
@@ -72,5 +73,11 @@ public partial class MainPageViewModel : ObservableObject
     async Task AddExpense()
     {
         await Shell.Current.GoToAsync(PageRoutePath.AddExpensePage);
+    }
+
+    [RelayCommand]
+    async Task OnExpenseSelected(int selectedExpenseId)
+    {
+        await Shell.Current.GoToAsync(PageRoutePath.ExpenseDetailPage + $"?ExpenseId={selectedExpenseId}");
     }
 }

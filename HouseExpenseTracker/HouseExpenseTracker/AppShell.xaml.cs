@@ -7,7 +7,7 @@ namespace HouseExpenseTracker
         {
             InitializeComponent();
             RegisterRoute<AddExpensePage>();
-            RegisterRoute<TestPage>();
+            RegisterRoute<ExpenseDetailPage>();
         }
 
         private void RegisterRoute<T>()

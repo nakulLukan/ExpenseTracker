@@ -4,6 +4,7 @@
              x:Class="HouseExpenseTracker.Views.AddExpensePage"
              xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
              xmlns:vm="clr-namespace:HouseExpenseTracker.ViewModels"
+             xmlns:model="clr-namespace:HouseExpenseTracker.Models"
              x:DataType="vm:AddExpensePageViewModel"
              Title="New Expense">
     <AbsoluteLayout>
@@ -16,24 +17,39 @@
             <vc:AppEntry Placeholder="Give a title"
                          Title="Expense Title"
                          Keyboard="Text"
-                         Text="{Binding NewExpense.Title}"></vc:AppEntry>
+                         Text="{Binding NewExpense.Title}"
+                         ValidationPropertyName="Title"
+                         ValidatorErrors="{Binding NewExpenseValidator.Errors}"></vc:AppEntry>
             <vc:AppEditor Placeholder="Enter a description"
+                          Text="{Binding NewExpense.Description}"
                           Title="Description"
-                          Text="{Binding NewExpense.Description}"></vc:AppEditor>
+                          ValidationPropertyName="Description"
+                          ValidatorErrors="{Binding NewExpenseValidator.Errors}"></vc:AppEditor>
             <vc:AppPicker Title="Paid To"
                           SelectedItem="{Binding NewExpense.PaidTo}"
+                          ValidationPropertyName="PaidTo"
+                          ValidatorErrors="{Binding NewExpenseValidator.Errors}"
                           SelectedItemCommand="{Binding PaidToItemSelectedCommand}"
                           ItemsSource="{Binding Persons}">
             </vc:AppPicker>
             <vc:AppDatePicker Date="{Binding NewExpense.ExpenseAddedOn}"
+                              ValidationPropertyName="ExpenseAddedOn"
+                              ValidatorErrors="{Binding NewExpenseValidator.Errors}"
                               Title="Date of Expense"
                               WidthRequest="{Binding Source={x:Reference layout}, Path=MinimumWidthRequest}"></vc:AppDatePicker>
-            <vc:AppEntry Placeholder="0.00" 
-                         Title="Amount (₹)" 
-                         Text = "{Binding NewExpense.Amount}"
-                         Keyboard="Numeric"></vc:AppEntry>
-
-            <Button Text="Add Expense" Command="{Binding AddExpenseCommand}"/>
+            <vc:AppEntry 
+                Placeholder="0.00" 
+                Title="Amount (₹)" 
+                Text = "{Binding NewExpense.Amount}"
+                ValidationPropertyName="Amount"  
+                ValidatorErrors="{Binding NewExpenseValidator.Errors}"
+                Keyboard="Numeric"></vc:AppEntry>
+            <vc:AppValidationButton 
+                Text="Add Expense" 
+                x:TypeArguments="model:NewExpenseDto"
+                Data="{Binding NewExpense}"
+                Validation="{Binding NewExpenseValidator}"
+                SubmitCommand="{Binding AddExpenseCommand}"></vc:AppValidationButton>
         </VerticalStackLayout>
     </AbsoluteLayout>
 </ContentPage>

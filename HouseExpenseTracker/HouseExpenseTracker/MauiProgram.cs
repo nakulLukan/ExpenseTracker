@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui;
 using HouseExpenseTracker.Infrastructure.Data;
-using HouseExpenseTracker.ViewHandlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 namespace HouseExpenseTracker
@@ -17,6 +16,7 @@ namespace HouseExpenseTracker
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FontAwesome");
                 });
             builder.Services.RegisterServices();
 #if DEBUG
@@ -30,10 +30,6 @@ namespace HouseExpenseTracker
                 await db.Database.MigrateAsync();
             });
 
-            EntryHandler.UseHandler();
-            EditorHandler.UseHandler();
-            PickerHandler.UseHandler();
-            DatePickerHandler.UseHandler();
             return app;
         }
     }

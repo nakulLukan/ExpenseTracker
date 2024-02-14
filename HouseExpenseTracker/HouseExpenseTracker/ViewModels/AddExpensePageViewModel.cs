@@ -21,6 +21,8 @@ public partial class AddExpensePageViewModel : ObservableObject
     [ObservableProperty]
     ObservableCollection<PersonPickerItemDto> _persons;
 
+    public NewExpenseDtoValidator NewExpenseValidator { get; init; } = new();
+
     public AddExpensePageViewModel(IDbContextFactory<AppDbContext> dbContext, SnackbarService alertService)
     {
         _dbContext = dbContext.CreateDbContext();
@@ -56,6 +58,10 @@ public partial class AddExpensePageViewModel : ObservableObject
     {
         try
         {
+            if (!NewExpenseValidator.Validate(NewExpense).IsValid)
+            {
+                return;
+            }
             Expense newExpense = new Expense()
             {
                 Title = NewExpense.Title.ToUpper(),

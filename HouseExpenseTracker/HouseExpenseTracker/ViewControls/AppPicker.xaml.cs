@@ -1,3 +1,4 @@
+using BindableProps;
 using System.Collections;
 using System.Windows.Input;
 
@@ -111,6 +112,36 @@ public partial class AppPicker : ContentView
     }
 
     #endregion
+
+    #region ValidatorErrors
+    public static readonly BindableProperty ValidatorErrorsProperty = BindableProperty.Create(nameof(ValidatorErrors), typeof(IDictionary<string, IEnumerable<string>>), typeof(AppPicker), defaultBindingMode: BindingMode.OneWay,
+        propertyChanged: (appPicker, oldVal, newVal) =>
+        {
+            var val = (IDictionary<string, IEnumerable<string>>)newVal;
+            var picker = (AppPicker)appPicker;
+            picker.IsValid = !val.ContainsKey(picker.ValidationPropertyName);
+            if (val.ContainsKey(picker.ValidationPropertyName))
+            {
+                picker.Errors = val[picker.ValidationPropertyName];
+            }
+        });
+
+    public IDictionary<string, IEnumerable<string>> ValidatorErrors
+    {
+        get => (IDictionary<string, IEnumerable<string>>)GetValue(ValidatorErrorsProperty);
+        set => SetValue(ValidatorErrorsProperty, value);
+    }
+    #endregion
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneWay)]
+    private bool _isValid = true;
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneWay)]
+    private IEnumerable<string> _errors;
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneTime)]
+    private string _validationPropertyName;
+
 }
 
 public class CustomPicker : Picker 

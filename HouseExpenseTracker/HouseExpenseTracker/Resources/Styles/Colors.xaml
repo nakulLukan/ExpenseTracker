@@ -13,6 +13,7 @@
     <Color x:Key="Secondary">#DFD8F7</Color>
     <Color x:Key="SecondaryDarkText">#9880e5</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
+    <Color x:Key="Error">#ff3333</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>

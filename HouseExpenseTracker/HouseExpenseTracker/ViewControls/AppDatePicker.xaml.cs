@@ -1,3 +1,5 @@
+using BindableProps;
+
 namespace HouseExpenseTracker.ViewControls;
 
 public partial class AppDatePicker : ContentView
@@ -109,6 +111,35 @@ public partial class AppDatePicker : ContentView
     }
 
     #endregion
+
+    #region ValidatorErrors
+    public static readonly BindableProperty ValidatorErrorsProperty = BindableProperty.Create(nameof(ValidatorErrors), typeof(IDictionary<string, IEnumerable<string>>), typeof(AppDatePicker), defaultBindingMode: BindingMode.OneWay,
+        propertyChanged: (appDatePicker, oldVal, newVal) =>
+        {
+            var val = (IDictionary<string, IEnumerable<string>>)newVal;
+            var picker = (AppDatePicker)appDatePicker;
+            picker.IsValid = !val.ContainsKey(picker.ValidationPropertyName);
+            if (val.ContainsKey(picker.ValidationPropertyName))
+            {
+                picker.Errors = val[picker.ValidationPropertyName];
+            }
+        });
+
+    public IDictionary<string, IEnumerable<string>> ValidatorErrors
+    {
+        get => (IDictionary<string, IEnumerable<string>>)GetValue(ValidatorErrorsProperty);
+        set => SetValue(ValidatorErrorsProperty, value);
+    }
+    #endregion
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneWay)]
+    private bool _isValid = true;
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneWay)]
+    private IEnumerable<string> _errors;
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneTime)]
+    private string _validationPropertyName;
 
     private void DatePicker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {

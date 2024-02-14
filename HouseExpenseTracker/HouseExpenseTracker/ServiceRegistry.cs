@@ -1,5 +1,6 @@
 ﻿using HouseExpenseTracker.Infrastructure.Data;
 using HouseExpenseTracker.ViewControls;
+using HouseExpenseTracker.ViewHandlers;
 using HouseExpenseTracker.ViewModels;
 using HouseExpenseTracker.Views;
 
@@ -10,13 +11,29 @@ public static class ServiceRegistry
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         RegisterViewsAndViewModels(services);
-        string dbBasePath = FileSystem.AppDataDirectory;
-        AppDbContext.Init(FileSystem.AppDataDirectory);
-        services.AddDbContextFactory<AppDbContext>();
-        services.AddDbContext<AppDbContext>(opt => { }, contextLifetime: ServiceLifetime.Scoped);
+        AddDbContext(services);
 
         services.AddSingleton<SnackbarService>();
+
+        RegisterHandlersAndMappers();
+
         return services;
+    }
+
+    private static void AddDbContext(IServiceCollection services)
+    {
+        string dbBasePath = FileSystem.AppDataDirectory;
+        AppDbContext.Init(dbBasePath);
+        services.AddDbContextFactory<AppDbContext>();
+        services.AddDbContext<AppDbContext>(opt => { }, contextLifetime: ServiceLifetime.Scoped);
+    }
+
+    private static void RegisterHandlersAndMappers()
+    {
+        EntryHandler.UseHandler();
+        EditorHandler.UseHandler();
+        PickerHandler.UseHandler();
+        DatePickerHandler.UseHandler();
     }
 
     private static void RegisterViewsAndViewModels(IServiceCollection services)
@@ -27,7 +44,7 @@ public static class ServiceRegistry
         services.AddTransient<AddExpensePage>();
         services.AddTransient<AddExpensePageViewModel>();
 
-        services.AddTransient<TestPage>();
-        services.AddTransient<TestViewModel>();
+        services.AddTransient<ExpenseDetailPage>();
+        services.AddTransient<ExpenseDetailPageViewModel>();
     }
 }

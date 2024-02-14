@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HouseExpenseTracker.Views.ExpenseDetailPage"
+             xmlns:vm="clr-namespace:HouseExpenseTracker.ViewModels"
+             x:DataType="vm:ExpenseDetailPageViewModel"
+             Title="Details">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Delete"
+                     Command="{Binding DeleteExpenseCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{StaticResource IconTrashCan}"
+                                 FontFamily="FontAwesome"
+                                 Size="Default"
+                                 Color="{StaticResource Secondary}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+        <VerticalStackLayout 
+            Spacing="10"
+            Margin="30">
+            <Label Text="{Binding ExpenseTitle}"
+                   FontSize="{OnPlatform Title, WinUI=Header}"
+                   TextTransform="Uppercase"/>
+
+            <Label Text="{Binding Amount}"
+                   FontSize="Large"
+                   TextColor="{StaticResource Primary}"/>
+            <Label Text="{Binding ExpenseDescription}"
+                   />
+            <Label Text="{Binding ExpenseAddedOn}"/>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Paid To: "/>
+                        <Span Text="{Binding ExpensePaidTo}" TextColor="{StaticResource SecondaryDarkText}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </VerticalStackLayout>
+</ContentPage>

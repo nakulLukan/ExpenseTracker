@@ -33,7 +33,9 @@
                CharacterSpacing="2"
                FontAttributes="Bold"
                BackgroundColor="{Binding BackgroundColor}"
-               Style="{StaticResource AppInputTitle}"></Label>
+               Style="{StaticResource AppInputTitle}">
+
+        </Label>
         <vc:CustomEntry Placeholder="{Binding Placeholder}" 
                         TextTransform="{Binding TextTransform}"
                         TextColor="{Binding TextColor}"
@@ -42,9 +44,38 @@
                         CursorColor="{Binding FocusColor}"
                         BackgroundColor="{Binding BackgroundColor}">
         </vc:CustomEntry>
+
         <BoxView 
             HeightRequest="1" 
             x:Name="bottomBorder"
-            BackgroundColor="{Binding BorderColor}"></BoxView>
+            BackgroundColor="{Binding BorderColor}">
+            <BoxView.Triggers>
+                <DataTrigger
+                    TargetType="BoxView"
+                    Binding="{Binding IsValid}"
+                    Value="False">
+                    <Setter Property="BackgroundColor" Value="{StaticResource Error}"/>
+                </DataTrigger>
+            </BoxView.Triggers>
+        </BoxView>
+
+        <Label 
+            Style="{StaticResource InputError}"
+            Text="{Binding Errors, Converter={StaticResource PickTopErrorConverter}}">
+            <Label.Triggers>
+                <DataTrigger 
+                    TargetType="Label"
+                    Binding="{Binding IsValid}"
+                    Value="False">
+                    <Setter Property="IsVisible" Value="True"/>
+                </DataTrigger>
+                <DataTrigger 
+                    TargetType="Label"
+                    Binding="{Binding IsValid}"
+                    Value="True">
+                    <Setter Property="IsVisible" Value="False"/>
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
     </VerticalStackLayout>
 </ContentView>

@@ -45,9 +45,38 @@
             BackgroundColor="{Binding BackgroundColor}"
             HorizontalOptions="Start">
         </vc:CustomDatePicker>
+
         <BoxView 
-            x:Name="bottomBorder"
             HeightRequest="1" 
-            BackgroundColor="{Binding BorderColor}"></BoxView>
+            x:Name="bottomBorder"
+            BackgroundColor="{Binding BorderColor}">
+            <BoxView.Triggers>
+                <DataTrigger
+                    TargetType="BoxView"
+                    Binding="{Binding IsValid}"
+                    Value="False">
+                    <Setter Property="BackgroundColor" Value="{StaticResource Error}"/>
+                </DataTrigger>
+            </BoxView.Triggers>
+        </BoxView>
+
+        <Label 
+            Style="{StaticResource InputError}"
+            Text="{Binding Errors, Converter={StaticResource PickTopErrorConverter}}">
+            <Label.Triggers>
+                <DataTrigger 
+                    TargetType="Label"
+                    Binding="{Binding IsValid}"
+                    Value="False">
+                    <Setter Property="IsVisible" Value="True"/>
+                </DataTrigger>
+                <DataTrigger 
+                    TargetType="Label"
+                    Binding="{Binding IsValid}"
+                    Value="True">
+                    <Setter Property="IsVisible" Value="False"/>
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
     </VerticalStackLayout>
 </ContentView>

@@ -1,8 +1,9 @@
+using BindableProps;
+
 namespace HouseExpenseTracker.ViewControls;
 
 public partial class AppEditor : ContentView
 {
-
     public AppEditor()
     {
         InitializeComponent();
@@ -127,6 +128,35 @@ public partial class AppEditor : ContentView
         set => SetValue(TextProperty, value);
     }
     #endregion
+
+    #region ValidatorErrors
+    public static readonly BindableProperty ValidatorErrorsProperty = BindableProperty.Create(nameof(ValidatorErrors), typeof(IDictionary<string, IEnumerable<string>>), typeof(AppEditor), defaultBindingMode: BindingMode.OneWay,
+        propertyChanged: (appEntry, oldVal, newVal) =>
+        {
+            var val = (IDictionary<string, IEnumerable<string>>)newVal;
+            var entry = (AppEditor)appEntry;
+            entry.IsValid = !val.ContainsKey(entry.ValidationPropertyName);
+            if (val.ContainsKey(entry.ValidationPropertyName))
+            {
+                entry.Errors = val[entry.ValidationPropertyName];
+            }
+        });
+
+    public IDictionary<string, IEnumerable<string>> ValidatorErrors
+    {
+        get => (IDictionary<string, IEnumerable<string>>)GetValue(ValidatorErrorsProperty);
+        set => SetValue(ValidatorErrorsProperty, value);
+    }
+    #endregion
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneWay)]
+    private bool _isValid = true;
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneWay)]
+    private IEnumerable<string> _errors;
+
+    [BindableProp(DefaultBindingMode = (int)BindingMode.OneTime)]
+    private string _validationPropertyName;
 }
 
 public class CustomEditor : Editor

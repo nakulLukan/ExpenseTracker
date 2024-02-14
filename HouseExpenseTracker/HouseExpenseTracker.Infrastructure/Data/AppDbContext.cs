@@ -22,6 +22,11 @@ public class AppDbContext : DbContext
     static string _databasePath =>
         Path.Combine(_databaseFilePath, _databaseFilename);
 
+    public AppDbContext()
+    {
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+    }
+
     public static void Init(string dbRelativePath)
     {
         _databaseFilePath = dbRelativePath;
