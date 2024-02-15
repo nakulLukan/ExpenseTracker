@@ -132,7 +132,7 @@
                                     <Label
                                                         Text="{Binding Description}" 
                                                         LineBreakMode="WordWrap" 
-                                                        MaxLines="2"
+                                                        MaxLines="1"
                                                         Style="{StaticResource ItemDescription}"
                                                         ></Label>
                                     <Label 
