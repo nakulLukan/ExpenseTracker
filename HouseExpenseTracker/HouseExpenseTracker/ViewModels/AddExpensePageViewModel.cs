@@ -6,7 +6,6 @@ using HouseExpenseTracker.Models;
 using HouseExpenseTracker.ViewControls;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
 
 namespace HouseExpenseTracker.ViewModels;
 
@@ -18,8 +17,9 @@ public partial class AddExpensePageViewModel : ObservableObject
     [ObservableProperty]
     NewExpenseDto _newExpense;
 
-    [ObservableProperty]
-    ObservableCollection<PersonPickerItemDto> _persons;
+    [ObservableProperty] IList<PickerItemDto> _paidToPersons;
+
+    [ObservableProperty] IList<PickerItemDto> _paidByPersons;
 
     public NewExpenseDtoValidator NewExpenseValidator { get; init; } = new();
 
@@ -27,7 +27,6 @@ public partial class AddExpensePageViewModel : ObservableObject
     {
         _dbContext = dbContext.CreateDbContext();
         _newExpense = new();
-        _persons = new();
         InitCommand = new AsyncRelayCommand(Init);
         _alertService = alertService;
     }
@@ -37,20 +36,24 @@ public partial class AddExpensePageViewModel : ObservableObject
     async Task Init(CancellationToken cancellationToken)
     {
         var persons = await _dbContext.Persons
-            .Select(x => new PersonPickerItemDto
+            .Select(x => new PickerItemDto
             {
                 Id = x.Id,
                 Name = x.Name,
             })
             .ToListAsync(cancellationToken);
-        persons.ForEach(x => Persons.Add(x));
 
         // This option can be used to show special popup where user can create new person data.
-        Persons.Add(new PersonPickerItemDto
+        persons.Add(new PickerItemDto
         {
             Id = 0,
             Name = "ADD NEW"
         });
+
+        PaidByPersons = persons;
+        PaidToPersons = persons;
+
+        _newExpense.PaidBy = GetDefaultPayer();
     }
 
     [RelayCommand]
@@ -68,7 +71,8 @@ public partial class AddExpensePageViewModel : ObservableObject
                 Amount = NewExpense.Amount.Value,
                 Description = NewExpense.Description?.Humanize(),
                 ExpenseAddedOn = NewExpense.ExpenseAddedOn,
-                PaidToId = NewExpense.PaidTo?.Id
+                PaidToId = NewExpense.PaidTo?.Id,
+                PaidById = NewExpense.PaidBy.Id
             };
 
             _dbContext.Expenses.Add(newExpense);
@@ -82,34 +86,35 @@ public partial class AddExpensePageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    async Task PaidToItemSelected(PersonPickerItemDto selectedItem)
+    async Task PaidToItemSelected(PickerItemDto selectedItem)
     {
         if (selectedItem == null) return;
 
         if (selectedItem.Id == 0)
         {
-            await AddNewPerson();
+            await AddNewPayee();
         }
     }
 
-    private async Task AddNewPerson()
+    [RelayCommand]
+    async Task PaidByItemSelected(PickerItemDto selectedItem)
     {
-        string paieeName = await Application.Current.MainPage.DisplayPromptAsync("Paiee Name", "", "Save", maxLength: 30, keyboard: Keyboard.Text);
+        if (selectedItem == null) return;
+
+        if (selectedItem.Id == 0)
+        {
+            await AddNewPayer();
+        }
+    }
+
+    private async Task AddNewPayee()
+    {
+        string paieeName = await Application.Current.MainPage.DisplayPromptAsync("Payee Name", "", "Save", maxLength: 30, keyboard: Keyboard.Text);
         if (!string.IsNullOrEmpty(paieeName))
         {
-            var newPerson = new Person()
-            {
-                Name = paieeName.Pascalize()
-            };
-            _dbContext.Persons.Add(newPerson);
-            await _dbContext.SaveChangesAsync();
-
-            var selectedPerson = new PersonPickerItemDto
-            {
-                Id = newPerson.Id,
-                Name = newPerson.Name,
-            };
-            Persons.Add(selectedPerson);
+            PickerItemDto selectedPerson = await AddPersonToDb(paieeName);
+            PaidByPersons.Add(selectedPerson);
+            PaidToPersons.Add(selectedPerson);
             NewExpense.PaidTo = selectedPerson;
         }
         else
@@ -117,5 +122,44 @@ public partial class AddExpensePageViewModel : ObservableObject
             // Reset the paid to field
             NewExpense.PaidTo = null;
         }
+    }
+
+    private async Task AddNewPayer()
+    {
+        string payerName = await Application.Current.MainPage.DisplayPromptAsync("Payer Name", "", "Save", maxLength: 30, keyboard: Keyboard.Text);
+        if (!string.IsNullOrEmpty(payerName))
+        {
+            PickerItemDto selectedPerson = await AddPersonToDb(payerName);
+            PaidByPersons.Add(selectedPerson);
+            PaidToPersons.Add(selectedPerson);
+            NewExpense.PaidBy = selectedPerson;
+        }
+        else
+        {
+            // Reset the paid to field
+            NewExpense.PaidBy = GetDefaultPayer();
+        }
+    }
+
+    private PickerItemDto GetDefaultPayer()
+    {
+        return PaidByPersons.First(x => x.Id == -1);
+    }
+
+    private async Task<PickerItemDto> AddPersonToDb(string paieeName)
+    {
+        var newPerson = new Person()
+        {
+            Name = paieeName.Pascalize()
+        };
+        _dbContext.Persons.Add(newPerson);
+        await _dbContext.SaveChangesAsync();
+
+        var selectedPerson = new PickerItemDto
+        {
+            Id = newPerson.Id,
+            Name = newPerson.Name,
+        };
+        return selectedPerson;
     }
 }

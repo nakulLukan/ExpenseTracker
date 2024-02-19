@@ -44,22 +44,62 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    <Frame 
-                        IsVisible="false" 
-                        HeightRequest="16" 
-                        BackgroundColor="Transparent"
-                        CornerRadius="0">
-                    </Frame>
+                    <ScrollView 
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+                        <HorizontalStackLayout 
+                            Margin="0,0,0,15"
+                            Spacing="10">
+                            <HorizontalStackLayout
+                                VerticalOptions="Center">
+                                <vc:AppEntry
+                                    Title="Search"
+                                    Placeholder="Search by 'Title'"
+                                    Text="{Binding SearchText}"
+                                    MinimumWidthRequest="150">
+                                    
+                                </vc:AppEntry>
+                                <ImageButton
+                                    Margin="-40,0,0,0"
+                                    Aspect="Center"
+                                    IsOpaque="True"
+                                    HorizontalOptions="Center"
+                                    Command="{Binding InitCommand}"
+                                    WidthRequest="40">
+                                    <ImageButton.Source>
+                                        <FontImageSource 
+                                            Size="15"
+                                            Glyph="{StaticResource IconMagnifyingGlass}"
+                                            FontFamily="FontAwesome"/> 
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </HorizontalStackLayout>
+                            
+                            <vc:AppPicker
+                                Title="Paid To"
+                                MinimumWidthRequest="100"
+                                SelectedItem="{Binding PaidToFilter}"
+                                SelectedItemCommand="{Binding InitCommand}"
+                                ItemsSource="{Binding Persons}"/>
+                            <vc:AppPicker
+                                Title="Paid By"
+                                MinimumWidthRequest="100"
+                                ItemsSource="{Binding Persons}"
+                                SelectedItemCommand="{Binding InitCommand}"
+                                SelectedItem="{Binding PaidByFilter}"/>
+                        </HorizontalStackLayout>
+                    </ScrollView>
                 </StackLayout>
-                <CollectionView ItemsSource="{Binding MonthlyExpenses}" 
-                                IsGrouped="True"
-                                Margin="10,60,10,10"
-                                VerticalScrollBarVisibility="Never"
-                                ItemsUpdatingScrollMode="KeepScrollOffset"
-                                ItemSizingStrategy="MeasureAllItems"
-                                SelectionMode="Single"
-                                SelectionChangedCommand="{Binding ExpenseSelectedCommand}"
-                                SelectionChangedCommandParameter="{Binding Path=SelectedItem.Id, Source={RelativeSource Mode=Self}}">
+                <CollectionView
+                    ItemsSource="{Binding MonthlyExpenses}" 
+                    IsGrouped="True"
+                    Margin="10,60,10,10"
+                    VerticalScrollBarVisibility="Never"
+                    ItemsUpdatingScrollMode="KeepScrollOffset"
+                    ItemSizingStrategy="MeasureAllItems"
+                    SelectionMode="Single"
+                    SelectionChangedCommand="{Binding ExpenseSelectedCommand}"
+                    SelectionChangedCommandParameter="{Binding Path=SelectedItem.Id, Source={RelativeSource Mode=Self}}">
                     <CollectionView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="dto:ExpenseGroupListItemDto">
                             <FlexLayout AlignContent="SpaceBetween"
@@ -119,8 +159,11 @@
                                     <Image Source="brick.png" />
                                 </Frame>
 
-                                <VerticalStackLayout Grid.Column="2" Padding="10,0">
+                                <Grid Grid.Column="2" Padding="10,0"
+                                      RowDefinitions="Auto, *, Auto"
+                                      ColumnDefinitions="Auto,*">
                                     <Label 
+                                        Grid.ColumnSpan="2"
                                                         HorizontalOptions="FillAndExpand" 
                                                         Text="{Binding ExpenseName}" 
                                                         LineBreakMode="TailTruncation" 
@@ -130,27 +173,49 @@
                                                         Margin="0,0,0,5"
                                                         FontSize="Default"></Label>
                                     <Label
+                                        Grid.ColumnSpan="2"
+                                        Grid.Row="1"
                                                         Text="{Binding Description}" 
                                                         LineBreakMode="WordWrap" 
                                                         MaxLines="1"
                                                         Style="{StaticResource ItemDescription}"
                                                         ></Label>
                                     <Label 
-                                                        FontSize="Caption">
+                                        Grid.Row="2"
+                                        FontSize="Caption">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span
-                                                                    Text="Paid to "
-                                                                    Style="{StaticResource ItemDescription}"
-                                                                    />
+                                                    Text="Paid to "
+                                                    Style="{StaticResource ItemDescription}"
+                                                    />
                                                 <Span 
-                                                                    Text="{Binding PaidTo}"
-                                                                    Style="{StaticResource ItemDescription}"
-                                                                    FontAttributes="Bold"/>
+                                                    Text="{Binding PaidTo}"
+                                                    Style="{StaticResource ItemDescription}"
+                                                    FontAttributes="Bold"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-                                </VerticalStackLayout>
+                                    <Label 
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        FontSize="Caption"
+                                        HorizontalOptions="End"
+                                        HorizontalTextAlignment="End">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    Text="Paid by "
+                                                    Style="{StaticResource ItemDescription}"
+                                                    />
+                                                <Span 
+                                                    Text="{Binding PaidBy}"
+                                                    Style="{StaticResource ItemDescription}"
+                                                    FontAttributes="Bold"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
                                 <Label 
                                                     Grid.Column="3"
                                                     HorizontalOptions="End" 

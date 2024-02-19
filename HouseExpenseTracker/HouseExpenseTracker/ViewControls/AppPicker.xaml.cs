@@ -1,4 +1,5 @@
 using BindableProps;
+using HouseExpenseTracker.Models;
 using System.Collections;
 using System.Windows.Input;
 
@@ -83,7 +84,19 @@ public partial class AppPicker : ContentView
 
     #region ItemsSource
     public static readonly BindableProperty ItemsSourceProperty =
-    BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(AppPicker), default(IList));
+    BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(AppPicker), default(IList),
+        propertyChanged: (bindable, prev, curr) =>
+        {
+            if (curr is IList<PickerItemDto> itemSource && !itemSource.Any(x => x.Id == 0))
+            {
+                bindable.SetValue(ItemsSourceProperty, itemSource.Prepend(new()
+                {
+                    Id = 0,
+                    Name = "Select"
+                }).ToList());
+            }
+        });
+
     public IList ItemsSource
     {
         get { return (IList)GetValue(ItemsSourceProperty); }
@@ -93,7 +106,14 @@ public partial class AppPicker : ContentView
 
     #region SelectedItem
     public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(AppPicker), null, BindingMode.TwoWay);
+            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(AppPicker), null, BindingMode.TwoWay,
+                propertyChanged: (bindable, prev, curr) =>
+                {
+                    if (curr is PickerItemDto item && item.Id == 0)
+                    {
+                        bindable.SetValue(SelectedItemProperty, null);
+                    }
+                });
     public object SelectedItem
     {
         get { return GetValue(SelectedItemProperty); }
@@ -144,7 +164,7 @@ public partial class AppPicker : ContentView
 
 }
 
-public class CustomPicker : Picker 
+public class CustomPicker : Picker
 {
     #region CursorColor
 

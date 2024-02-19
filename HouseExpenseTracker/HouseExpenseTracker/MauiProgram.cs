@@ -19,6 +19,7 @@ namespace HouseExpenseTracker
                     fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FontAwesome");
                 });
             builder.Services.RegisterServices();
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

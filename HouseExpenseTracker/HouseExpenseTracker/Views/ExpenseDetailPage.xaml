@@ -29,6 +29,7 @@
             <Label Text="{Binding ExpenseDescription}"
                    />
             <Label Text="{Binding ExpenseAddedOn}"/>
+        <Grid ColumnDefinitions="*,*">
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
@@ -37,5 +38,15 @@
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
+            <Label Grid.Column="1">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Paid By: "/>
+                        <Span Text="{Binding ExpensePaidBy}" TextColor="{StaticResource SecondaryDarkText}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Grid>
+            
         </VerticalStackLayout>
 </ContentPage>

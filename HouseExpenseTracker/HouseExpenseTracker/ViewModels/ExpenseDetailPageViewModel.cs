@@ -19,6 +19,7 @@ public partial class ExpenseDetailPageViewModel : ObservableObject
     [ObservableProperty] private string _expenseTitle;
     [ObservableProperty] private string _expenseDescription;
     [ObservableProperty] private string _expensePaidTo;
+    [ObservableProperty] private string _expensePaidBy;
     [ObservableProperty] private string _expenseAddedOn;
     [ObservableProperty] private string _amount;
 
@@ -34,10 +35,12 @@ public partial class ExpenseDetailPageViewModel : ObservableObject
     {
         var expense = await _dbContext.Expenses
             .Include(x => x.PaidTo)
+            .Include(x => x.PaidBy)
             .FirstOrDefaultAsync(x => x.Id == ExpenseId, cancellationToken);
         ExpenseTitle = expense.Title;
         ExpenseDescription = expense.Description;
         ExpensePaidTo = expense.PaidTo?.Name ?? "not mentioned";
+        ExpensePaidBy = expense.PaidBy.Name;
         Amount = expense.Amount.ToCurrency();
         ExpenseAddedOn = expense.ExpenseAddedOn.ToString("ddd, dd MMM yyyy");
     }

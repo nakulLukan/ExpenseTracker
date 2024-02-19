@@ -6,6 +6,7 @@ public class ExpenseListItemDto
     public string ExpenseName { get; set; }
     public string Description { get; set; }
     public string PaidTo { get; set; }
+    public string PaidBy { get; set; }
     public string AddedMonth { get; set; }
     public string AddedDate { get; set; }
     public float Amount { get; set; }

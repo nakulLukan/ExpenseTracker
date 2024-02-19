@@ -30,7 +30,14 @@
                           ValidationPropertyName="PaidTo"
                           ValidatorErrors="{Binding NewExpenseValidator.Errors}"
                           SelectedItemCommand="{Binding PaidToItemSelectedCommand}"
-                          ItemsSource="{Binding Persons}">
+                          ItemsSource="{Binding PaidToPersons}">
+            </vc:AppPicker>
+            <vc:AppPicker Title="Paid By"
+                          SelectedItem="{Binding NewExpense.PaidBy}"
+                          ValidationPropertyName="PaidBy"
+                          ValidatorErrors="{Binding NewExpenseValidator.Errors}"
+                          SelectedItemCommand="{Binding PaidByItemSelectedCommand}"
+                          ItemsSource="{Binding PaidByPersons}">
             </vc:AppPicker>
             <vc:AppDatePicker Date="{Binding NewExpense.ExpenseAddedOn}"
                               ValidationPropertyName="ExpenseAddedOn"
