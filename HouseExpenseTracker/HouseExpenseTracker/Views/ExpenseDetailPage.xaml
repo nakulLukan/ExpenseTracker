@@ -47,6 +47,5 @@
                 </Label.FormattedText>
             </Label>
         </Grid>
-            
-        </VerticalStackLayout>
+    </VerticalStackLayout>
 </ContentPage>

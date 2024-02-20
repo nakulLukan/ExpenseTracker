@@ -57,7 +57,7 @@
                                     Placeholder="Search by 'Title'"
                                     Text="{Binding SearchText}"
                                     MinimumWidthRequest="150">
-                                    
+
                                 </vc:AppEntry>
                                 <ImageButton
                                     Margin="-40,0,0,0"
@@ -70,11 +70,11 @@
                                         <FontImageSource 
                                             Size="15"
                                             Glyph="{StaticResource IconMagnifyingGlass}"
-                                            FontFamily="FontAwesome"/> 
+                                            FontFamily="FontAwesome"/>
                                     </ImageButton.Source>
                                 </ImageButton>
                             </HorizontalStackLayout>
-                            
+
                             <vc:AppPicker
                                 Title="Paid To"
                                 MinimumWidthRequest="100"
@@ -99,29 +99,33 @@
                     ItemSizingStrategy="MeasureAllItems"
                     SelectionMode="Single"
                     SelectionChangedCommand="{Binding ExpenseSelectedCommand}"
-                    SelectionChangedCommandParameter="{Binding Path=SelectedItem.Id, Source={RelativeSource Mode=Self}}">
+                    SelectionChangedCommandParameter="{Binding Path=SelectedItem.Id, Source={RelativeSource Mode=Self}}"
+                    >
                     <CollectionView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="dto:ExpenseGroupListItemDto">
-                            <FlexLayout AlignContent="SpaceBetween"
-                                                        Direction="Row"
-                                                        FlowDirection="MatchParent" JustifyContent="SpaceBetween">
-                                <Label Text="{Binding GroupName}" 
-                                                       FlexLayout.Basis="50%"
-                                                       Style="{StaticResource GroupHeader}"
-                                                       HorizontalOptions="StartAndExpand"/>
+                            <FlexLayout 
+                                AlignContent="SpaceBetween"
+                                Direction="Row"
+                                FlowDirection="MatchParent" JustifyContent="SpaceBetween">
                                 <Label 
-                                                    FlexLayout.Basis="50%"
-                                                    Style="{StaticResource GroupHeader}"
-                                                    HorizontalOptions="EndAndExpand"
-                                                    HorizontalTextAlignment="End">
+                                    Text="{Binding GroupName}" 
+                                    FlexLayout.Basis="50%"
+                                    Style="{StaticResource GroupHeader}"
+                                    HorizontalOptions="StartAndExpand"/>
+                                <Label 
+                                    FlexLayout.Basis="50%"
+                                    Style="{StaticResource GroupHeader}"
+                                    HorizontalOptions="EndAndExpand"
+                                    HorizontalTextAlignment="End">
                                     <Label.FormattedText>
                                         <FormattedString>
                                             <Span 
-                                                                Text="Total: "
-                                                                Style="{StaticResource GroupHeader}"
-                                                                />
-                                            <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" 
-                                                                  Style="{StaticResource Currency}"/>
+                                                Text="Total: "
+                                                Style="{StaticResource GroupHeader}"
+                                                />
+                                            <Span 
+                                                Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" 
+                                                Style="{StaticResource Currency}"/>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
@@ -141,45 +145,46 @@
 
                                 <VerticalStackLayout VerticalOptions="Center">
                                     <Label 
-                                                        Text="{Binding AddedDate}" 
-                                                        Style="{StaticResource ItemDay}"
-                                                        HorizontalOptions="Center"/>
+                                        Text="{Binding AddedDate}" 
+                                        Style="{StaticResource ItemDay}"
+                                        HorizontalOptions="Center"/>
                                     <Label 
-                                                        Text="{Binding AddedMonth}"  
-                                                        Style="{StaticResource ItemDay}"
-                                                        HorizontalOptions="Center"/>
+                                        Text="{Binding AddedMonth}"  
+                                        Style="{StaticResource ItemDay}"
+                                        HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                                 <Frame 
-                                                    Grid.Column="1" 
-                                                    CornerRadius="0" 
-                                                    Padding="5"
-                                                    BackgroundColor="Gray"
-                                                    BorderColor="Transparent" 
-                                                    VerticalOptions="Fill">
+                                    Grid.Column="1" 
+                                    CornerRadius="0" 
+                                    Padding="5"
+                                    BackgroundColor="Gray"
+                                    BorderColor="Transparent" 
+                                    VerticalOptions="Fill">
                                     <Image Source="brick.png" />
                                 </Frame>
 
-                                <Grid Grid.Column="2" Padding="10,0"
-                                      RowDefinitions="Auto, *, Auto"
-                                      ColumnDefinitions="Auto,*">
+                                <Grid 
+                                    Grid.Column="2" Padding="10,0"
+                                    RowDefinitions="Auto, *, Auto"
+                                    ColumnDefinitions="Auto,*">
                                     <Label 
                                         Grid.ColumnSpan="2"
-                                                        HorizontalOptions="FillAndExpand" 
-                                                        Text="{Binding ExpenseName}" 
-                                                        LineBreakMode="TailTruncation" 
-                                                        TextTransform="Uppercase"
-                                                        CharacterSpacing="1"
-                                                        FontAttributes="Bold"
-                                                        Margin="0,0,0,5"
-                                                        FontSize="Default"></Label>
+                                        HorizontalOptions="FillAndExpand" 
+                                        Text="{Binding ExpenseName}" 
+                                        LineBreakMode="TailTruncation" 
+                                        TextTransform="Uppercase"
+                                        CharacterSpacing="1"
+                                        FontAttributes="Bold"
+                                        Margin="0,0,0,5"
+                                        FontSize="Default"></Label>
                                     <Label
                                         Grid.ColumnSpan="2"
                                         Grid.Row="1"
-                                                        Text="{Binding Description}" 
-                                                        LineBreakMode="WordWrap" 
-                                                        MaxLines="1"
-                                                        Style="{StaticResource ItemDescription}"
-                                                        ></Label>
+                                        Text="{Binding Description}" 
+                                        LineBreakMode="WordWrap" 
+                                        MaxLines="1"
+                                        Style="{StaticResource ItemDescription}"
+                                        ></Label>
                                     <Label 
                                         Grid.Row="2"
                                         FontSize="Caption">
@@ -217,11 +222,11 @@
                                     </Label>
                                 </Grid>
                                 <Label 
-                                                    Grid.Column="3"
-                                                    HorizontalOptions="End" 
-                                                    Style="{StaticResource Currency}"
-                                                    FontSize="Body"
-                                                    Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"/>
+                                    Grid.Column="3"
+                                    HorizontalOptions="End" 
+                                    Style="{StaticResource Currency}"
+                                    FontSize="Body"
+                                    Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

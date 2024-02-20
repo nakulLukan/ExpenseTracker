@@ -4,6 +4,7 @@ using HouseExpenseTracker.Helpers;
 using HouseExpenseTracker.Infrastructure.Data;
 using HouseExpenseTracker.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace HouseExpenseTracker.ViewModels;
@@ -12,8 +13,7 @@ public partial class MainPageViewModel : ObservableObject
 {
     readonly AppDbContext _dbContext;
 
-    [ObservableProperty]
-    IList<ExpenseGroupListItemDto> _monthlyExpenses;
+    public ObservableCollection<ExpenseGroupListItemDto> MonthlyExpenses { get; }
 
     [ObservableProperty]
     private bool _isRefreshing;
@@ -23,7 +23,7 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty] private string _searchText;
 
-    [ObservableProperty] IList<PickerItemDto> _persons;
+    [ObservableProperty] ObservableCollection<PickerItemDto> _persons;
 
     [ObservableProperty] private PickerItemDto _paidByFilter;
     [ObservableProperty] private PickerItemDto _paidToFilter;
@@ -32,7 +32,7 @@ public partial class MainPageViewModel : ObservableObject
     {
         _dbContext = dbContext.CreateDbContext();
         InitCommand = new AsyncRelayCommand(Init, AsyncRelayCommandOptions.FlowExceptionsToTaskScheduler);
-        MonthlyExpenses = new List<ExpenseGroupListItemDto>();
+        MonthlyExpenses = new ObservableCollection<ExpenseGroupListItemDto>();
     }
 
     public IAsyncRelayCommand InitCommand { get; }
@@ -53,9 +53,9 @@ public partial class MainPageViewModel : ObservableObject
                 Name = x.Name
             })
             .ToListAsync();
-        if (persons.Count != Persons?.Count)
+        if (persons.Count != Persons?.Where(x => x.Id != 0)?.Count())
         {
-            Persons = persons;
+            Persons = new ObservableCollection<PickerItemDto>(persons);
         }
     }
 
@@ -85,12 +85,12 @@ public partial class MainPageViewModel : ObservableObject
             .OrderByDescending(x => x.ExpenseAddedOn)
             .ToListAsync(cancellationToken);
 
-        var result = new List<ExpenseGroupListItemDto>();
+        MonthlyExpenses.Clear();
         foreach (var expense in currentExpenses.GroupBy(x => new { x.ExpenseAddedOn.Year, x.ExpenseAddedOn.Month }))
         {
             var month = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(expense.Key.Month);
 
-            result.Add(new ExpenseGroupListItemDto($"{month} {expense.Key.Year}",
+            var item = (new ExpenseGroupListItemDto($"{month} {expense.Key.Year}",
                 expense.Sum(x => x.Amount),
                 expense.Select(x =>
                 {
@@ -109,10 +109,9 @@ public partial class MainPageViewModel : ObservableObject
                 )
             );
 
-            TotalAmount = result.Sum(x => x.TotalAmount);
+            MonthlyExpenses.Add(item);
+            TotalAmount = MonthlyExpenses.Sum(x => x.TotalAmount);
         }
-
-        MonthlyExpenses = result;
     }
 
     [RelayCommand]

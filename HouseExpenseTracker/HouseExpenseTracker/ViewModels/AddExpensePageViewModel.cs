@@ -6,6 +6,7 @@ using HouseExpenseTracker.Models;
 using HouseExpenseTracker.ViewControls;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace HouseExpenseTracker.ViewModels;
 
@@ -17,9 +18,8 @@ public partial class AddExpensePageViewModel : ObservableObject
     [ObservableProperty]
     NewExpenseDto _newExpense;
 
-    [ObservableProperty] IList<PickerItemDto> _paidToPersons;
-
-    [ObservableProperty] IList<PickerItemDto> _paidByPersons;
+    [ObservableProperty] ObservableCollection<PickerItemDto> _paidToPersons;
+    [ObservableProperty] ObservableCollection<PickerItemDto> _paidByPersons;
 
     public NewExpenseDtoValidator NewExpenseValidator { get; init; } = new();
 
@@ -46,12 +46,12 @@ public partial class AddExpensePageViewModel : ObservableObject
         // This option can be used to show special popup where user can create new person data.
         persons.Add(new PickerItemDto
         {
-            Id = 0,
+            Id = -100,
             Name = "ADD NEW"
         });
 
-        PaidByPersons = persons;
-        PaidToPersons = persons;
+        PaidByPersons = new ObservableCollection<PickerItemDto>(persons);
+        PaidToPersons = new ObservableCollection<PickerItemDto>(persons);
 
         _newExpense.PaidBy = GetDefaultPayer();
     }
@@ -90,7 +90,7 @@ public partial class AddExpensePageViewModel : ObservableObject
     {
         if (selectedItem == null) return;
 
-        if (selectedItem.Id == 0)
+        if (selectedItem.Id == -100)
         {
             await AddNewPayee();
         }
@@ -101,7 +101,7 @@ public partial class AddExpensePageViewModel : ObservableObject
     {
         if (selectedItem == null) return;
 
-        if (selectedItem.Id == 0)
+        if (selectedItem.Id == -100)
         {
             await AddNewPayer();
         }
@@ -113,8 +113,8 @@ public partial class AddExpensePageViewModel : ObservableObject
         if (!string.IsNullOrEmpty(paieeName))
         {
             PickerItemDto selectedPerson = await AddPersonToDb(paieeName);
-            PaidByPersons.Add(selectedPerson);
             PaidToPersons.Add(selectedPerson);
+            OnPropertyChanged(nameof(PaidToPersons));
             NewExpense.PaidTo = selectedPerson;
         }
         else
@@ -129,9 +129,11 @@ public partial class AddExpensePageViewModel : ObservableObject
         string payerName = await Application.Current.MainPage.DisplayPromptAsync("Payer Name", "", "Save", maxLength: 30, keyboard: Keyboard.Text);
         if (!string.IsNullOrEmpty(payerName))
         {
-            PickerItemDto selectedPerson = await AddPersonToDb(payerName);
-            PaidByPersons.Add(selectedPerson);
-            PaidToPersons.Add(selectedPerson);
+            PickerItemDto selectedPerson = await AddPersonToDb(payerName); 
+            var persons = PaidByPersons;
+            persons.Add(selectedPerson);
+            PaidByPersons = persons;
+
             NewExpense.PaidBy = selectedPerson;
         }
         else

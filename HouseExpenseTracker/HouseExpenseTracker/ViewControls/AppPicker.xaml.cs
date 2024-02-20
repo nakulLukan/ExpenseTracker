@@ -85,18 +85,20 @@ public partial class AppPicker : ContentView
     #region ItemsSource
     public static readonly BindableProperty ItemsSourceProperty =
     BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(AppPicker), default(IList),
-        propertyChanged: (bindable, prev, curr) =>
+        propertyChanged: (bindable, oldValue, newValue) =>
         {
-            if (curr is IList<PickerItemDto> itemSource && !itemSource.Any(x => x.Id == 0))
+            if (newValue is IList<PickerItemDto> source)
             {
-                bindable.SetValue(ItemsSourceProperty, itemSource.Prepend(new()
+                if (!source.Any(x => x.Id == 0))
                 {
-                    Id = 0,
-                    Name = "Select"
-                }).ToList());
+                    ((AppPicker)bindable).ItemsSource.Insert(0, new PickerItemDto()
+                    {
+                        Id = 0,
+                        Name = "Select"
+                    });
+                }
             }
         });
-
     public IList ItemsSource
     {
         get { return (IList)GetValue(ItemsSourceProperty); }
@@ -107,11 +109,11 @@ public partial class AppPicker : ContentView
     #region SelectedItem
     public static readonly BindableProperty SelectedItemProperty =
             BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(AppPicker), null, BindingMode.TwoWay,
-                propertyChanged: (bindable, prev, curr) =>
+                propertyChanged: (bindable, prevVal, newVal) =>
                 {
-                    if (curr is PickerItemDto item && item.Id == 0)
+                    if (newVal is PickerItemDto currVal && currVal != null && currVal.Id == 0)
                     {
-                        bindable.SetValue(SelectedItemProperty, null);
+                        ((AppPicker)bindable).SelectedItem = null;
                     }
                 });
     public object SelectedItem
