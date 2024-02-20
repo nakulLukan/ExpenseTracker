@@ -41,6 +41,24 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        EntityConfiguration(modelBuilder);
+        SeedData(modelBuilder);
+    }
+
+    private static void SeedData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Person>().HasData(
+            [
+                new Person()
+                {
+                    Id = -1,
+                    Name = "Self"
+                }
+            ]);
+    }
+
+    private void EntityConfiguration(ModelBuilder modelBuilder)
+    {
         BuildModel(modelBuilder.Entity<Expense>());
         BuildModel(modelBuilder.Entity<Person>());
     }
@@ -50,10 +68,15 @@ public class AppDbContext : DbContext
         modelBuilder.Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Property(x => x.Title).IsRequired();
         modelBuilder.Property(x => x.Description).IsRequired(false);
+        modelBuilder.Property(x => x.PaidById).HasDefaultValue(-1);
 
         modelBuilder.HasOne(x => x.PaidTo)
             .WithMany()
             .HasForeignKey(x => x.PaidToId);
+
+        modelBuilder.HasOne(x => x.PaidBy)
+            .WithMany()
+            .HasForeignKey(x => x.PaidById);
     }
 
     void BuildModel(EntityTypeBuilder<Person> modelBuilder)
