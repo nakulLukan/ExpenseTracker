@@ -1,11 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HouseExpenseTracker.Domain;
+using HouseExpenseTracker.Extensions;
 using HouseExpenseTracker.Helpers;
 using HouseExpenseTracker.Infrastructure.Data;
 using HouseExpenseTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text;
 
 namespace HouseExpenseTracker.ViewModels;
 
@@ -15,8 +18,8 @@ public partial class MainPageViewModel : ObservableObject
 
     public ObservableCollection<ExpenseGroupListItemDto> MonthlyExpenses { get; }
 
-    [ObservableProperty]
-    private bool _isRefreshing;
+    [ObservableProperty] private bool _isRefreshing;
+    [ObservableProperty] private bool _canExport = true;
 
     [ObservableProperty]
     float _totalAmount = 0;
@@ -124,5 +127,69 @@ public partial class MainPageViewModel : ObservableObject
     async Task OnExpenseSelected(int selectedExpenseId)
     {
         await Shell.Current.GoToAsync(PageRoutePath.ExpenseDetailPage + $"?ExpenseId={selectedExpenseId}");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExport))]
+    async Task OnExport()
+    {
+        CanExport = false;
+        var expenses = await _dbContext.Expenses
+            .OrderByDescending(x => x.ExpenseAddedOn)
+            .Include(x => x.PaidTo)
+            .Include(x => x.PaidBy)
+            .ToListAsync();
+        StringBuilder csv = GenerateCsvFileContent(expenses);
+        string path = await SaveCsvFileToLocalStorage(csv);
+        await EmailExpenses(path, "House Construction Cost", expenses.Sum(x => x.Amount));
+        CanExport = true;
+    }
+
+    private static async Task<string> SaveCsvFileToLocalStorage(StringBuilder csv)
+    {
+        var fileName = "Expenses.csv";
+        // Store in storage
+        var path = Path.Combine(FileSystem.AppDataDirectory, fileName);
+        await File.WriteAllTextAsync(path, csv.ToString());
+        return path;
+    }
+
+    private static StringBuilder GenerateCsvFileContent(List<Expense> expenses)
+    {
+        // Map each column to to string
+        var csv = new StringBuilder();
+        // Humanize column name for readability
+        csv.AppendLine("House Construction Cost");
+        csv.AppendLine($"Total Cost: {expenses.Sum(x => x.Amount).ToCurrency()}");
+        csv.AppendLine();
+        csv.AppendLine("Date,Title,Description,Amount,Paid To,Paid By");
+        foreach (var expense in expenses)
+        {
+            var newLine = $"{expense.ExpenseAddedOn},{expense.Title},{expense.Description},{expense.Amount},{expense.PaidTo?.Name ?? "-"},{expense.PaidBy.Name}";
+            csv.AppendLine(newLine);
+        }
+
+        return csv;
+    }
+
+    async Task EmailExpenses(string attachmentPath, string expenseGroupName, float totalCost)
+    {
+        if (Email.Default.IsComposeSupported)
+        {
+            string subject = "House Construction Expenses";
+            StringBuilder emailBodyContent = new StringBuilder(expenseGroupName).AppendLine();
+            emailBodyContent.AppendLine($"Total Cost: {totalCost.ToCurrency()}");
+            string body = emailBodyContent.ToString();
+            string[] recipients = new[] { "matrixlukan@gmail.com" };
+
+            var message = new EmailMessage
+            {
+                Subject = subject,
+                Body = body,
+                BodyFormat = EmailBodyFormat.PlainText,
+                To = new List<string>(recipients)
+            };
+            message.Attachments.Add(new EmailAttachment(attachmentPath));
+            await Email.Default.ComposeAsync(message);
+        }
     }
 }
