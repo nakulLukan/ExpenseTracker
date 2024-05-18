@@ -1,249 +1,229 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HouseExpenseTracker.Views.MainPage"
-             xmlns:app="clr-namespace:HouseExpenseTracker"
-             xmlns:vm="clr-namespace:HouseExpenseTracker.ViewModels"
-             xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
-             xmlns:dto="clr-namespace:HouseExpenseTracker.Models"
-             xmlns:converter="clr-namespace:HouseExpenseTracker.Converters"
-             xmlns:local="clr-namespace:HouseExpenseTracker.Views"
-             Title="Expense Tracker"
-             x:Name="page"
-             x:DataType="vm:MainPageViewModel">
+<ContentPage
+    x:Class="HouseExpenseTracker.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:HouseExpenseTracker"
+    xmlns:converter="clr-namespace:HouseExpenseTracker.Converters"
+    xmlns:dto="clr-namespace:HouseExpenseTracker.Models"
+    xmlns:local="clr-namespace:HouseExpenseTracker.Views"
+    xmlns:vc="clr-namespace:HouseExpenseTracker.ViewControls"
+    xmlns:vm="clr-namespace:HouseExpenseTracker.ViewModels"
+    x:Name="page"
+    Title="Expense Tracker"
+    x:DataType="vm:MainPageViewModel">
     <ContentPage.Resources>
-        <converter:CurrencyConverter x:Key="CurrencyConverter"/>
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
         <Style x:Key="Currency" TargetType="Label">
-            <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="{StaticResource Primary}" />
+            <Setter Property="FontAttributes" Value="Bold" />
         </Style>
         <Style x:Key="GroupHeader" TargetType="Label">
-            <Setter Property="FontSize" Value="Body"/>
+            <Setter Property="FontSize" Value="Body" />
         </Style>
         <Style x:Key="ItemDay" TargetType="Label">
-            <Setter Property="FontSize" Value="{OnPlatform Small, WinUI=Default}"/>
-            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="{OnPlatform Small, WinUI=Default}" />
+            <Setter Property="FontAttributes" Value="Bold" />
         </Style>
         <Style x:Key="ItemDescription" TargetType="Label">
-            <Setter Property="FontSize" Value="Caption"/>
+            <Setter Property="FontSize" Value="Caption" />
         </Style>
     </ContentPage.Resources>
     <AbsoluteLayout>
-        <ScrollView AbsoluteLayout.LayoutBounds="0,0, 1,1"
-                    AbsoluteLayout.LayoutFlags="SizeProportional"
-                    Margin="5,2">
-            <StackLayout>
-                <StackLayout Padding="10,30,0,0"  VerticalOptions="Center" Spacing="25">
-                    <Label FontSize="Title" CharacterSpacing="3" FontAttributes="Bold">House Construction Cost</Label>
-                    <Label FontSize="Subtitle">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Total Cost: " />
-                                <Span Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}"
-                                      Style="{StaticResource Currency}"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                    <ScrollView 
-                        Orientation="Horizontal"
-                        HorizontalScrollBarVisibility="Never">
-                        <HorizontalStackLayout 
-                            Margin="0,0,0,15"
-                            Spacing="10">
-                            <HorizontalStackLayout
-                                VerticalOptions="Center">
-                                <vc:AppEntry
-                                    Title="Search"
-                                    Placeholder="Search by 'Title'"
-                                    Text="{Binding SearchText}"
-                                    MinimumWidthRequest="150">
-
-                                </vc:AppEntry>
-                                <ImageButton
-                                    Margin="-40,0,0,0"
-                                    Aspect="Center"
-                                    IsOpaque="True"
-                                    HorizontalOptions="Center"
-                                    Command="{Binding InitCommand}"
-                                    WidthRequest="40">
-                                    <ImageButton.Source>
-                                        <FontImageSource 
-                                            Size="15"
-                                            Glyph="{StaticResource IconMagnifyingGlass}"
-                                            FontFamily="FontAwesome"/>
-                                    </ImageButton.Source>
-                                </ImageButton>
-                            </HorizontalStackLayout>
-
-                            <vc:AppPicker
-                                Title="Paid To"
-                                MinimumWidthRequest="100"
-                                SelectedItem="{Binding PaidToFilter}"
-                                SelectedItemCommand="{Binding InitCommand}"
-                                ItemsSource="{Binding Persons}"/>
-                            <vc:AppPicker
-                                Title="Paid By"
-                                MinimumWidthRequest="100"
-                                ItemsSource="{Binding Persons}"
-                                SelectedItemCommand="{Binding InitCommand}"
-                                SelectedItem="{Binding PaidByFilter}"/>
-                            <Button 
-                                Text="Export"
-                                BackgroundColor="{StaticResource SecondaryDarkText}"
-                                Command="{Binding ExportCommand}"/>
+        <Grid
+            Margin="5,2"
+            AbsoluteLayout.LayoutBounds="0,0, 1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            RowDefinitions="Auto, *">
+            <VerticalStackLayout
+                Padding="10,30,0,0"
+                Spacing="25"
+                VerticalOptions="Center">
+                <Label
+                    CharacterSpacing="3"
+                    FontAttributes="Bold"
+                    FontSize="Title">
+                    House Construction Cost
+                </Label>
+                <Label FontSize="Subtitle">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Total Cost: " />
+                            <Span Style="{StaticResource Currency}" Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal">
+                    <HorizontalStackLayout Margin="0,0,0,15" Spacing="10">
+                        <HorizontalStackLayout VerticalOptions="Center">
+                            <vc:AppEntry
+                                Title="Search"
+                                MinimumWidthRequest="150"
+                                Placeholder="Search by 'Title'"
+                                Text="{Binding SearchText}" />
+                            <ImageButton
+                                Margin="-40,0,0,0"
+                                Aspect="Center"
+                                Command="{Binding InitCommand}"
+                                HorizontalOptions="Center"
+                                IsOpaque="True"
+                                WidthRequest="40">
+                                <ImageButton.Source>
+                                    <FontImageSource
+                                        FontFamily="FontAwesome"
+                                        Glyph="{StaticResource IconMagnifyingGlass}"
+                                        Size="15" />
+                                </ImageButton.Source>
+                            </ImageButton>
                         </HorizontalStackLayout>
-                    </ScrollView>
-                </StackLayout>
-                <CollectionView
-                    ItemsSource="{Binding MonthlyExpenses}" 
-                    IsGrouped="True"
-                    Margin="10,60,10,10"
-                    VerticalScrollBarVisibility="Never"
-                    ItemsUpdatingScrollMode="KeepScrollOffset"
-                    ItemSizingStrategy="MeasureAllItems"
-                    SelectionMode="Single"
-                    SelectionChangedCommand="{Binding ExpenseSelectedCommand}"
-                    SelectionChangedCommandParameter="{Binding Path=SelectedItem.Id, Source={RelativeSource Mode=Self}}"
-                    >
-                    <CollectionView.GroupHeaderTemplate>
-                        <DataTemplate x:DataType="dto:ExpenseGroupListItemDto">
-                            <FlexLayout 
-                                AlignContent="SpaceBetween"
-                                Direction="Row"
-                                FlowDirection="MatchParent" JustifyContent="SpaceBetween">
-                                <Label 
-                                    Text="{Binding GroupName}" 
-                                    FlexLayout.Basis="50%"
-                                    Style="{StaticResource GroupHeader}"
-                                    HorizontalOptions="StartAndExpand"/>
-                                <Label 
-                                    FlexLayout.Basis="50%"
-                                    Style="{StaticResource GroupHeader}"
-                                    HorizontalOptions="EndAndExpand"
-                                    HorizontalTextAlignment="End">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span 
-                                                Text="Total: "
-                                                Style="{StaticResource GroupHeader}"
-                                                />
-                                            <Span 
-                                                Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" 
-                                                Style="{StaticResource Currency}"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </FlexLayout>
-                        </DataTemplate>
-                    </CollectionView.GroupHeaderTemplate>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type dto:ExpenseListItemDto}">
-                            <Grid Padding="0,10" 
-                                  ColumnSpacing="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="30" />
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
 
-                                <VerticalStackLayout VerticalOptions="Center">
-                                    <Label 
-                                        Text="{Binding AddedDate}" 
-                                        Style="{StaticResource ItemDay}"
-                                        HorizontalOptions="Center"/>
-                                    <Label 
-                                        Text="{Binding AddedMonth}"  
-                                        Style="{StaticResource ItemDay}"
-                                        HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
-                                <Frame 
-                                    Grid.Column="1" 
-                                    CornerRadius="0" 
-                                    Padding="5"
-                                    BackgroundColor="Gray"
-                                    BorderColor="Transparent" 
-                                    VerticalOptions="Fill">
-                                    <Image Source="brick.png" />
-                                </Frame>
+                        <vc:AppPicker
+                            Title="Paid To"
+                            ItemsSource="{Binding Persons}"
+                            MinimumWidthRequest="100"
+                            SelectedItem="{Binding PaidToFilter}"
+                            SelectedItemCommand="{Binding InitCommand}" />
+                        <vc:AppPicker
+                            Title="Paid By"
+                            ItemsSource="{Binding Persons}"
+                            MinimumWidthRequest="100"
+                            SelectedItem="{Binding PaidByFilter}"
+                            SelectedItemCommand="{Binding InitCommand}" />
+                        <Button
+                            BackgroundColor="{StaticResource SecondaryDarkText}"
+                            Command="{Binding ExportCommand}"
+                            Text="Export" />
+                    </HorizontalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+            <CollectionView
+                Grid.Row="1"
+                Margin="10,10,10,0"
+                IsGrouped="True"
+                ItemSizingStrategy="MeasureAllItems"
+                ItemsSource="{Binding MonthlyExpenses}"
+                SelectionChangedCommand="{Binding ExpenseSelectedCommand}"
+                SelectionChangedCommandParameter="{Binding Path=SelectedItem.Id, Source={RelativeSource Mode=Self}}"
+                SelectionMode="Single">
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="dto:ExpenseGroupListItemDto">
+                        <Grid ColumnDefinitions="*,2*">
+                            <Label
+                                HorizontalOptions="Start"
+                                HorizontalTextAlignment="Start"
+                                Style="{StaticResource GroupHeader}"
+                                Text="{Binding GroupName}" />
+                            <Label
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                HorizontalTextAlignment="End"
+                                Style="{StaticResource GroupHeader}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Style="{StaticResource GroupHeader}" Text="Total: " />
+                                        <Span Style="{StaticResource Currency}" Text="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type dto:ExpenseListItemDto}">
+                        <Grid
+                            Padding="0,10"
+                            ColumnSpacing="10"
+                            HeightRequest="75"
+                            RowDefinitions="*,*,*">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                                <Grid 
-                                    Grid.Column="2" Padding="10,0"
-                                    RowDefinitions="Auto, *, Auto"
-                                    ColumnDefinitions="Auto,*">
-                                    <Label 
-                                        Grid.ColumnSpan="2"
-                                        HorizontalOptions="FillAndExpand" 
-                                        Text="{Binding ExpenseName}" 
-                                        LineBreakMode="TailTruncation" 
-                                        TextTransform="Uppercase"
-                                        CharacterSpacing="1"
-                                        FontAttributes="Bold"
-                                        Margin="0,0,0,5"
-                                        FontSize="Default"></Label>
-                                    <Label
-                                        Grid.ColumnSpan="2"
-                                        Grid.Row="1"
-                                        Text="{Binding Description}" 
-                                        LineBreakMode="WordWrap" 
-                                        MaxLines="1"
-                                        Style="{StaticResource ItemDescription}"
-                                        ></Label>
-                                    <Label 
-                                        Grid.Row="2"
-                                        FontSize="Caption">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    Text="Paid to "
-                                                    Style="{StaticResource ItemDescription}"
-                                                    />
-                                                <Span 
-                                                    Text="{Binding PaidTo}"
-                                                    Style="{StaticResource ItemDescription}"
-                                                    FontAttributes="Bold"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label 
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        FontSize="Caption"
-                                        HorizontalOptions="End"
-                                        HorizontalTextAlignment="End">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    Text="Paid by "
-                                                    Style="{StaticResource ItemDescription}"
-                                                    />
-                                                <Span 
-                                                    Text="{Binding PaidBy}"
-                                                    Style="{StaticResource ItemDescription}"
-                                                    FontAttributes="Bold"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </Grid>
-                                <Label 
-                                    Grid.Column="3"
-                                    HorizontalOptions="End" 
-                                    Style="{StaticResource Currency}"
-                                    FontSize="Body"
-                                    Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            <Label
+                                Grid.Row="0"
+                                Grid.RowSpan="3"
+                                Margin="10,0,0,0"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Style="{StaticResource ItemDay}"
+                                Text="{Binding AddedDate}"
+                                VerticalOptions="Center"
+                                VerticalTextAlignment="Center" />
+                            <Border
+                                Grid.RowSpan="3"
+                                Grid.Column="1"
+                                Padding="5"
+                                BackgroundColor="Gray"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                                <Image Source="brick.png" />
+                            </Border>
 
-            </StackLayout>
-        </ScrollView>
-
-        <Button Text="Add Expense"
-                Command="{Binding AddExpenseCommand}"
-                Margin="20"
-                AbsoluteLayout.LayoutBounds="1,1"
-                AbsoluteLayout.LayoutFlags="PositionProportional">
-        </Button>
+                            <Label
+                                Grid.Column="2"
+                                CharacterSpacing="1"
+                                FontAttributes="Bold"
+                                FontSize="Default"
+                                HorizontalOptions="FillAndExpand"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding ExpenseName}"
+                                TextTransform="Uppercase" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                LineBreakMode="WordWrap"
+                                MaxLines="1"
+                                Style="{StaticResource ItemDescription}"
+                                Text="{Binding Description}" />
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                FontSize="Caption">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Style="{StaticResource ItemDescription}" Text="Paid to " />
+                                        <Span
+                                            FontAttributes="Bold"
+                                            Style="{StaticResource ItemDescription}"
+                                            Text="{Binding PaidTo}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                FontSize="Caption"
+                                HorizontalOptions="End"
+                                HorizontalTextAlignment="End">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Style="{StaticResource ItemDescription}" Text="Paid by " />
+                                        <Span
+                                            FontAttributes="Bold"
+                                            Style="{StaticResource ItemDescription}"
+                                            Text="{Binding PaidBy}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label
+                                Grid.Column="3"
+                                FontSize="Body"
+                                HorizontalOptions="End"
+                                Style="{StaticResource Currency}"
+                                Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        <Button
+            Margin="20"
+            AbsoluteLayout.LayoutBounds="1,1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            Command="{Binding AddExpenseCommand}"
+            Text="Add Expense" />
     </AbsoluteLayout>
 </ContentPage>
